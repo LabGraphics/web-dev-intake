@@ -23,7 +23,13 @@ export const budgetSchema = z.object({
 
 // Validates the Primary Goal (Step 5)
 export const goalSchema = z.object({
-    primaryGoal: z.enum(["Lead Gen", "Sales", "Branding", "Information", "Other"], {
+    primaryGoal: z.enum([
+        "Launch a New Business Website",
+        "Redesign or Refresh Existing Site",
+        "Drive Sales & E-commerce",
+        "Organization or Membership Portal",
+        "Digital Portfolio or Event Site"
+    ], {
         error: "Please select a primary goal",
     }),
 });

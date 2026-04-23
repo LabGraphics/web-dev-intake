@@ -8,7 +8,11 @@ import { z } from"zod";
 type GoalData = z.infer<typeof goalSchema>;
 
 const goals = [
-"Lead Gen","Sales","Branding","Information","Other"
+  "Launch a New Business Website",
+  "Redesign or Refresh Existing Site",
+  "Drive Sales & E-commerce",
+  "Organization or Membership Portal",
+  "Digital Portfolio or Event Site"
 ];
 
 export function PrimaryGoal() {
