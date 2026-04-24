@@ -11,6 +11,7 @@ import { ContentReadiness } from"./steps/ContentReadiness";
 import { Pages } from"./steps/Pages";
 import { Features } from"./steps/Features";
 import { Technical } from"./steps/Technical";
+import { Maintenance } from"./steps/Maintenance";
 import { ServiceAddons } from"./steps/ServiceAddons";
 import { Summary } from"./steps/Summary";
 import { Success } from"./steps/Success";
@@ -42,11 +43,13 @@ export function StepRenderer() {
       case 10:
         return <Technical key="step-10"/>;
       case 11:
-        return <ServiceAddons key="step-11"/>;
+        return <Maintenance key="step-11"/>;
       case 12:
-        return <Summary key="step-12"/>;
+        return <ServiceAddons key="step-12"/>;
       case 13:
-        return <Success key="step-13"/>;
+        return <Summary key="step-13"/>;
+      case 14:
+        return <Success key="step-14"/>;
       default:
         return (
           <div key="default"className="py-16 text-center">
@@ -74,9 +77,9 @@ export function StepRenderer() {
       </div>
 
       {/* Progress indicator */}
-      {currentStep > 1 && currentStep < 13 && (
+      {currentStep > 1 && currentStep < 14 && (
         <div className="absolute top-8 left-0 right-0 px-8 flex items-center justify-center space-x-1 sm:space-x-1.5">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((step) => (
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map((step) => (
             <div 
               key={step} 
               className={`h-2 rounded-full transition-all duration-300 ${

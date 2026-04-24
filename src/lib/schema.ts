@@ -66,7 +66,17 @@ export const technicalSchema = z.object({
     fontPreference: z.string().optional(),
 });
 
-// Validates Service Addons (Step 11)
+// Validates Service Addons (Step 12)
 export const addonsSchema = z.object({
     serviceAddons: z.array(z.string()),
+});
+
+// Validates Maintenance (Step 11)
+export const maintenanceSchema = z.object({
+    maintenancePlan: z.enum([
+        "Professional Care Plan",
+        "Self-Managed"
+    ], {
+        error: "Please select a maintenance plan",
+    }),
 });

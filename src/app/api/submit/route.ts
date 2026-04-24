@@ -1,29 +1,40 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { calculatePricing } from '@/lib/pricingEngine';
 
 export async function POST(req: Request) {
   try {
     const data = await req.json();
     
-    // Validate we have data
     if (!data) {
       return NextResponse.json({ error: 'No data provided' }, { status: 400 });
     }
 
-    // You will need an App Password if using Gmail
+    // Run pricing engine
+    const pricing = calculatePricing(data);
+
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: process.env.GMAIL_USER || 'info.labgraphics@gmail.com',
-        pass: process.env.GMAIL_APP_PASSWORD, // Add this to .env.local
+        pass: process.env.GMAIL_APP_PASSWORD,
       },
     });
 
-    // Format the email
-    const htmlContent = `
+    // 1. Internal Lead Email
+    const internalHtmlContent = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
         <h2 style="color: #4A151B; border-bottom: 2px solid #4A151B; padding-bottom: 10px;">New Lab Graphics Intake Lead!</h2>
         
+        <div style="background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+          <h3 style="color: #4A151B; margin-top: 0;">Pricing Engine Output</h3>
+          <p><strong>Total Points:</strong> ${pricing.points}</p>
+          <p><strong>Base Internal Quote:</strong> $${pricing.baseEstimate.toLocaleString()}</p>
+          <p><strong>Package Tier:</strong> ${pricing.tierName}</p>
+          <p><strong>Maintenance Choice:</strong> ${data.maintenancePlan || 'None'}</p>
+          ${pricing.monthlyFee > 0 ? `<p><strong>Suggested Monthly Recurring:</strong> $${pricing.monthlyFee}</p>` : ''}
+        </div>
+
         <h3 style="color: #999999;">1. Contact Details</h3>
         <p><strong>Name:</strong> ${data.fullName || 'N/A'}</p>
         <p><strong>Email:</strong> ${data.email || 'N/A'}</p>
@@ -37,7 +48,7 @@ export async function POST(req: Request) {
         <p><strong>Current Website:</strong> ${data.currentWebsite || 'N/A'}</p>
         <p><strong>Primary Goal:</strong> ${data.primaryGoal || 'N/A'}</p>
         <p><strong>Target Audience:</strong> ${data.targetAudience || 'N/A'}</p>
-        <p><strong>Budget Range:</strong> <span style="font-weight: bold; color: #4A151B;">${data.budgetRange || 'N/A'}</span></p>
+        <p><strong>Client's Stated Budget:</strong> <span style="font-weight: bold; color: #4A151B;">${data.budgetRange || 'N/A'}</span></p>
 
         <h3 style="color: #999999;">3. Requirements (Checklists)</h3>
         <p><strong>Content Readiness:</strong> ${data.contentStatus || 'N/A'}</p>
@@ -56,17 +67,40 @@ export async function POST(req: Request) {
       </div>
     `;
 
-    // Only attempt to send if credentials are provided to prevent crash on demo
+    // 2. Client Auto-Responder Email
+    const clientHtmlContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+        <h2 style="color: #4A151B;">Hi ${data.fullName?.split(' ')[0] || 'there'},</h2>
+        <p>Thank you for submitting your project details to <strong>LAB GRAPHICS</strong>! We are excited to learn more about your vision for ${data.businessName || 'your business'}.</p>
+        
+        <p>Based on your requirements, your project aligns with our <strong>${pricing.tierName}</strong> package. Estimated investment for this scope starts at <strong>${pricing.estimateRange}</strong>.</p>
+        
+        <p>We will follow up within 24 hours to schedule a discovery call so we can discuss the exact details and finalize a proposal.</p>
+        
+        <p>Best regards,</p>
+        <p><strong>The Lab Graphics Team</strong></p>
+      </div>
+    `;
+
     if (process.env.GMAIL_APP_PASSWORD) {
-      await transporter.sendMail({
+      const internalMail = transporter.sendMail({
         from: process.env.GMAIL_USER || 'info.labgraphics@gmail.com',
         to: 'info.labgraphics@gmail.com',
-        subject: `New Lead: ${data.fullName || 'Unknown'} - ${data.businessName || 'Business'}`,
-        html: htmlContent,
+        subject: `New Lead: ${data.fullName || 'Unknown'} - ${pricing.tierName}`,
+        html: internalHtmlContent,
       });
+
+      const clientMail = data.email ? transporter.sendMail({
+        from: process.env.GMAIL_USER || 'info.labgraphics@gmail.com',
+        to: data.email,
+        subject: `Your Web Project with LAB GRAPHICS`,
+        html: clientHtmlContent,
+      }) : Promise.resolve();
+
+      await Promise.all([internalMail, clientMail]);
     } else {
-      console.warn("EMAIL_PASS not found in environment variables. Email was not sent to SMTP server, but API returned success for UI testing.");
-      console.log("Captured Data:", JSON.stringify(data, null, 2));
+      console.warn("GMAIL_APP_PASSWORD not found. Email not sent.");
+      console.log("Internal Payload:", pricing);
     }
 
     return NextResponse.json({ success: true, message: 'Lead submitted successfully' });

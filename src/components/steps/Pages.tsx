@@ -8,16 +8,13 @@ import { z } from"zod";
 type PagesData = z.infer<typeof pagesSchema>;
 
 const pagesList = [
-  // Core
-"Homepage","About","Services","Contact","FAQ","Blog",
-  // Business
-"Portfolio/Gallery","Testimonials","Team","Careers","Media",
-  // Functional
-"Login/Sign Up","Account","Booking/Scheduling","Forms/PDF",
-  // eCommerce
-"Product","Product Demo","Cart","Checkout","Shipping","Payment",
-  // Legal/Other
-"Privacy Policy","Donate","Other"
+  "Home Page", 
+  "About Us", 
+  "Services/Products", 
+  "Blog/News", 
+  "Portfolio/Gallery", 
+  "Contact Page", 
+  "Custom Landing Page"
 ];
 
 export function Pages() {

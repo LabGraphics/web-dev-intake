@@ -8,14 +8,12 @@ import { z } from"zod";
 type FeaturesData = z.infer<typeof featuresSchema>;
 
 const featuresList = [
-  // Visuals
-"Image Slider","Image Gallery","Video Streaming",
-  // Interactivity
-"Call-to-Action Buttons","Customer Login/Registration","Search","Maps","Live Chat","Chat bots",
-  // Marketing
-"Newsletter","Blog","Social Media Buttons",
-  // Sales
-"Pricing Tables","Online Ordering","Online Payment","Shopping Cart","Forms"
+  "Contact/Lead Forms", 
+  "Online Booking/Scheduling", 
+  "Payment Processing (Stripe/PayPal)", 
+  "Member Login & Dashboards", 
+  "Social Media Integration", 
+  "Basic SEO Setup"
 ];
 
 export function Features() {

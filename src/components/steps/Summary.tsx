@@ -117,12 +117,12 @@ export function Summary() {
           </div>
         </section>
 
-        {/* Technical & Addons (Steps 10, 11) */}
+        {/* Technical, Maintenance & Addons (Steps 10, 11, 12) */}
         <section className="bg-gray-50 p-5 rounded-2xl border border-gray-100 relative group">
           <button onClick={() => handleEdit(10)} className="absolute top-5 right-5 text-gray-500 hover:text-brand-maroon transition-colors">
             <Edit2 className="w-4 h-4"/>
           </button>
-          <h3 className="text-sm font-bold uppercase text-brand-maroon tracking-wider mb-4">Technical & Extras</h3>
+          <h3 className="text-sm font-bold uppercase text-brand-maroon tracking-wider mb-4">Technical & Support</h3>
           <div className="space-y-3 text-sm">
             <div className="grid grid-cols-2 gap-2">
               <div><span className="text-black font-semibold block">Logo:</span> <span className="text-black font-medium">{formData.hasLogo || '—'}</span></div>
@@ -132,12 +132,19 @@ export function Summary() {
             </div>
             <div className="flex justify-between items-start pt-2 border-t border-gray-200">
               <div>
+                <span className="text-black font-semibold block">Maintenance Plan:</span> 
+                <span className="text-black font-medium">{formData.maintenancePlan || '—'}</span>
+              </div>
+              <button onClick={() => handleEdit(11)} className="text-gray-500 hover:text-brand-maroon"><Edit2 className="w-3.5 h-3.5"/></button>
+            </div>
+            <div className="flex justify-between items-start pt-2 border-t border-gray-200">
+              <div>
                 <span className="text-black font-semibold block">Extra Services:</span> 
                 <span className="text-black font-medium">
                   {formData.serviceAddons?.length ? formData.serviceAddons.join(", ") : "None"}
                 </span>
               </div>
-              <button onClick={() => handleEdit(11)} className="text-gray-500 hover:text-brand-maroon"><Edit2 className="w-3.5 h-3.5"/></button>
+              <button onClick={() => handleEdit(12)} className="text-gray-500 hover:text-brand-maroon"><Edit2 className="w-3.5 h-3.5"/></button>
             </div>
           </div>
         </section>
