@@ -47,7 +47,7 @@ export function ContactInfo() {
             className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-maroon focus:border-transparent outline-none transition-all text-slate-900 placeholder-slate-400"
             placeholder="Jane Doe"
           />
-          {errors.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName.message}</p>}
+          {errors.fullName && <p className="text-brand-maroon text-sm mt-1">{errors.fullName.message}</p>}
         </div>
 
         <div>
@@ -58,7 +58,7 @@ export function ContactInfo() {
             className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-maroon focus:border-transparent outline-none transition-all text-slate-900 placeholder-slate-400"
             placeholder="jane@example.com"
           />
-          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
+          {errors.email && <p className="text-brand-maroon text-sm mt-1">{errors.email.message}</p>}
         </div>
 
         <div>
@@ -68,7 +68,7 @@ export function ContactInfo() {
             className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-maroon focus:border-transparent outline-none transition-all text-slate-900 placeholder-slate-400"
             placeholder="(555) 123-4567"
           />
-          {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>}
+          {errors.phone && <p className="text-brand-maroon text-sm mt-1">{errors.phone.message}</p>}
         </div>
 
 

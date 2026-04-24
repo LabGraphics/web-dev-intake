@@ -44,6 +44,11 @@ export function calculatePricing(data: any) {
 
   // 5. Calculation
   const baseEstimate = points * 40;
+  
+  // 7. Payment Splits
+  const deposit = baseEstimate * 0.40;
+  const midpoint = baseEstimate * 0.30;
+  const finalSplit = baseEstimate * 0.30;
 
   // 6. Tier Evaluation
   let tierName = "Essential Build";
@@ -58,6 +63,9 @@ export function calculatePricing(data: any) {
     baseEstimate,
     tierName,
     monthlyFee,
-    estimateRange: `$${baseEstimate.toLocaleString()}`
+    estimateRange: `$${baseEstimate.toLocaleString()}`,
+    deposit,
+    midpoint,
+    finalSplit
   };
 }

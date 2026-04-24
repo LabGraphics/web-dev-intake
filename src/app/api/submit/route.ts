@@ -27,12 +27,19 @@ export async function POST(req: Request) {
         <h2 style="color: #4A151B; border-bottom: 2px solid #4A151B; padding-bottom: 10px;">New Lab Graphics Intake Lead!</h2>
         
         <div style="background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
-          <h3 style="color: #4A151B; margin-top: 0;">Pricing Engine Output</h3>
+          <h3 style="color: #4A151B; margin-top: 0;">Pricing Engine Output ($40/pt)</h3>
           <p><strong>Total Points:</strong> ${pricing.points}</p>
           <p><strong>Base Internal Quote:</strong> $${pricing.baseEstimate.toLocaleString()}</p>
           <p><strong>Package Tier:</strong> ${pricing.tierName}</p>
           <p><strong>Maintenance Choice:</strong> ${data.maintenancePlan || 'None'}</p>
-          ${pricing.monthlyFee > 0 ? `<p><strong>Suggested Monthly Recurring:</strong> $${pricing.monthlyFee}</p>` : ''}
+          ${pricing.monthlyFee > 0 ? `<p><strong>Professional Care Plan (Recurring):</strong> $${pricing.monthlyFee}</p>` : ''}
+          
+          <h4 style="color: #4A151B; margin-bottom: 5px;">Invoice Split (40/30/30)</h4>
+          <ul style="margin-top: 0; padding-left: 20px;">
+            <li><strong>Deposit (40%):</strong> $${pricing.deposit.toLocaleString()}</li>
+            <li><strong>Mid-Point (30%):</strong> $${pricing.midpoint.toLocaleString()}</li>
+            <li><strong>Final (30%):</strong> $${pricing.finalSplit.toLocaleString()}</li>
+          </ul>
         </div>
 
         <h3 style="color: #999999;">1. Contact Details</h3>
@@ -69,16 +76,14 @@ export async function POST(req: Request) {
 
     // 2. Client Auto-Responder Email
     const clientHtmlContent = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
-        <h2 style="color: #4A151B;">Hi ${data.fullName?.split(' ')[0] || 'there'},</h2>
-        <p>Thank you for submitting your project details to <strong>LAB GRAPHICS</strong>! We are excited to learn more about your vision for ${data.businessName || 'your business'}.</p>
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333; line-height: 1.6;">
+        <p>Hi ${data.fullName?.split(' ')[0] || 'there'}, I’ve reviewed your submission for ${data.businessName || 'your business'}. To build out the ${data.primaryGoal || 'project'} with the features you selected (${data.features?.length ? data.features.join(', ') : 'the required foundation'}), the investment for this project is <strong>${pricing.estimateRange}</strong>.</p>
         
-        <p>Based on your requirements, your project aligns with our <strong>${pricing.tierName}</strong> package. Estimated investment for this scope starts at <strong>${pricing.estimateRange}</strong>.</p>
+        <p>Our standard completion timeline is 4 to 6 weeks. We structure payments in three parts: a 40% deposit to begin, 30% at the mid-point of development, and the final 30% upon completion.</p>
+
+        <p>If this sounds good to you, let me know and we can schedule a call to finalize the details and get started.</p>
         
-        <p>We will follow up within 24 hours to schedule a discovery call so we can discuss the exact details and finalize a proposal.</p>
-        
-        <p>Best regards,</p>
-        <p><strong>The Lab Graphics Team</strong></p>
+        <p>Best,<br><strong>Matthew Gongbee | Lab Graphics</strong></p>
       </div>
     `;
 

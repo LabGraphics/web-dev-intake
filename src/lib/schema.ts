@@ -3,7 +3,7 @@ import { z } from "zod";
 // Validates the Contact Info (Step 2)
 export const contactSchema = z.object({
     fullName: z.string().min(2, "Name is required"),
-    email: z.string().email("Invalid email address"),
+    email: z.string().regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Please enter a valid email address so we can send your estimate."),
     phone: z.string().optional(),
 });
 
